@@ -29,3 +29,29 @@ jobs:
         with:
           name: built-jar
           path: target/*.jar
+
+  docker-build:
+    name: Build Docker Image
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download Built JAR
+        uses: actions/download-artifact@v3
+        with:
+          name: built-jar
+          path: target/
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -t myapp:latest -f deploy_conf/images/dev/Dockerfile .
+          docker tag myapp:latest mydockerhubuser/myapp:latest
+
+      - name: Push Docker Image
+        run: docker push mydockerhubuser/myapp:latest
