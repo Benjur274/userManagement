@@ -51,7 +51,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t myapp:latest -f deploy_conf/images/Dockerfile .
-          docker tag myapp:latest mydockerhubuser/myapp:latest
+          docker tag myapp:latest ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
       - name: Push Docker Image
-        run: docker push mydockerhubuser/myapp:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
