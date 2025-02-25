@@ -77,7 +77,7 @@ cd <repository_directory>
 
 - Build the Project:
 ```bash
-- mvn clean package
+mvn clean package
 ```
 - Run the Application:
 ```bash
@@ -90,7 +90,7 @@ java -jar target/usermanagement-0.0.1-SNAPSHOT.jar
 ```
 
 ## CI/CD Pipeline
-This project includes a GitHub Actions workflod(build-c-.yml) that:
+This project includes a GitHub Actions workflow (build-c-.yml) that:
 - Sets up JDK21
 - Builds the project using Maven
 - Packages the application as a JAR file
@@ -104,6 +104,7 @@ http://localhost:8080/swagger-ui.html
 ## Future Enhancements
 - Implement JWT-based authentication
 - Add support for user roles and permissions
+- Set up a dedicated development database
 - Integrate database migrations using Flyway or Liquibase
 - Improve logging and monitoring for production use
 ## License
