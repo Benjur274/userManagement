@@ -1,5 +1,6 @@
 package com.testcompany.usermanagement.service;
 
+import com.testcompany.usermanagement.exceptions.UserAlreadyExistsException;
 import com.testcompany.usermanagement.mapper.UserMapper;
 import com.testcompany.usermanagement.model.dto.UpdateUserDto;
 import com.testcompany.usermanagement.model.dto.UserDto;
@@ -10,7 +11,6 @@ import com.testcompany.usermanagement.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -42,12 +42,14 @@ public class UserService {
 
     @Transactional
     public UserDto createUser(CreateUserDto userDTO) {
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException("User with username " + userDTO.getUsername() + " already exists");
+        }
         User user = userMapper.toUser(userDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.toUserResponseDTO(userRepository.save(user));
     }
 
-    @PreAuthorize("@userSecurity.hasAccess(#id, authentication.name)")
     @Transactional
     public UserDto updateUser(Long id, UpdateUserDto updateUserDTO) {
         User existingUser = userRepository.findById(id)
@@ -61,7 +63,6 @@ public class UserService {
         return userMapper.toUserResponseDTO(userRepository.save(existingUser));
     }
 
-    @PreAuthorize("@userSecurity.hasAccess(#id, authentication.name)")
     @Transactional
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {

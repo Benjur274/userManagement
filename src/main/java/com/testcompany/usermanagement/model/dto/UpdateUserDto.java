@@ -3,11 +3,9 @@ package com.testcompany.usermanagement.model.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UpdateUserDto {
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     @Schema(description = "The user's full name", example = "John Doe")
