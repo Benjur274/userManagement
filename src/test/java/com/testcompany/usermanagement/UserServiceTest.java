@@ -65,10 +65,8 @@ public class UserServiceTest {
         when(userMapper.toUserResponseDTO(user1)).thenReturn(dto1);
         when(userMapper.toUserResponseDTO(user2)).thenReturn(dto2);
 
-        // Act
         List<UserDto> result = userService.getAllUsers();
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(userRepository, times(1)).findAll();
@@ -76,7 +74,6 @@ public class UserServiceTest {
 
     @Test
     public void testGetUserById_UserExists() {
-        // Arrange
         User user = new User();
         user.setId(1L);
         user.setName("User One");
